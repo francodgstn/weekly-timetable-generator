@@ -4,7 +4,10 @@ import Timetable from './Timetable' // Create Timetable.jsx for rendering the ti
 import EntryForm from './EntryForm' // Create EntryForm.jsx for the form
 import CoursesList from './CoursesList'
 
+
 const Content = () => {
+
+
   const [tabValue, setTabValue] = useState(0)
 
   const handleChangeTab = (event, newValue) => {

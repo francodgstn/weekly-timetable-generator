@@ -3,6 +3,7 @@ import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHe
 import html2pdf from 'html2pdf.js'
 import html2canvas from 'html2canvas'
 import { Refresh, PictureAsPdf, CropOriginal } from '@material-ui/icons' // Import the icons
+import { useSelector } from 'react-redux';
 
 const useStyles = makeStyles({
   cell: {
@@ -37,24 +38,25 @@ const useStyles = makeStyles({
 
 const Timetable = () => {
   const classes = useStyles()
+  const courses = useSelector((state) => state.courses);
 
-  const [courses, setCourses] = useState(getCoursesFromStorage())
+  //const [courses, setCourses] = useState(getCoursesFromStorage())
 
-  useEffect(() => {
-    const updateFromStorage = (event) => {
-      if (event.key === 'courses') {
-        // Handle the change in storage and update the component state
-        const storedCourses = getCoursesFromStorage()
-        setCourses(storedCourses)
-      }
-    }
+  // useEffect(() => {
+  //   const updateFromStorage = (event) => {
+  //     if (event.key === 'courses') {
+  //       // Handle the change in storage and update the component state
+  //       const storedCourses = getCoursesFromStorage()
+  //       setCourses(storedCourses)
+  //     }
+  //   }
 
-    window.addEventListener('storage', updateFromStorage)
+  //   window.addEventListener('storage', updateFromStorage)
 
-    return () => {
-      // window.removeEventListener('storage', updateFromStorage)
-    }
-  }, [])
+  //   return () => {
+  //     // window.removeEventListener('storage', updateFromStorage)
+  //   }
+  // }, [])
 
   // Function to get time slots from storage
   function getCoursesFromStorage () {

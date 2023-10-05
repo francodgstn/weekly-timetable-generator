@@ -14,12 +14,13 @@ import dayjs from 'dayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { MultiSectionDigitalClock } from '@mui/x-date-pickers/MultiSectionDigitalClock'
-
+import { useDispatch } from 'react-redux';
 import ColorSelect from './ColorPicker'
+import {courseAdded, courseDeletedAll} from './coursesSlice'
 
 const EntryForm = () => {
   const defaultTime = dayjs().set({ hour: 8, minute: 0 })
-
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: '',
     color: '#CCCCCC',
@@ -65,13 +66,13 @@ const EntryForm = () => {
     }
 
     // Retrieve existing courses from local storage
-    const existingCourses = JSON.parse(localStorage.getItem('courses')) || []
-
+    // const existingCourses = JSON.parse(localStorage.getItem('courses')) || []
     // Add the new course to the array
-    existingCourses.push(newCourse)
-
+    // existingCourses.push(newCourse)
     // Save the updated array back to local storage
-    localStorage.setItem('courses', JSON.stringify(existingCourses))
+    // localStorage.setItem('courses', JSON.stringify(existingCourses))
+
+    dispatch(courseAdded(newCourse));
 
     // Optionally, you can reset the form data
     setFormData({
@@ -95,9 +96,16 @@ const EntryForm = () => {
     return false
   }
 
+  const clearTimetable = () => {
+    dispatch(courseDeletedAll())
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
     <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+      <Button variant="contained" color="primary" onClick={clearTimetable}>
+        Clear Timetable
+      </Button>
       <Typography variant="h6" gutterBottom>
         Add New Course
       </Typography>
