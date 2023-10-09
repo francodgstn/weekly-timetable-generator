@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Container, Grid, Tabs, Tab, Paper } from '@material-ui/core'
+import { Container, Grid, Tabs, Tab, Paper } from '@mui/material'
 import Timetable from './Timetable' // Create Timetable.jsx for rendering the timetable
 import EntryForm from './EntryForm' // Create EntryForm.jsx for the form
 import CoursesList from './CoursesList'

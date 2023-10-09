@@ -1,8 +1,8 @@
 import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { ThemeProvider, createTheme } from '@material-ui/core/styles'
+import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/styles';
 import { Provider } from 'react-redux';
-import CssBaseline from '@material-ui/core/CssBaseline'
+import CssBaseline from '@mui/material/CssBaseline'
 import App from './components/App'
 import {store} from './store'
 
@@ -12,8 +12,10 @@ const root = document.getElementById('root')
 const rootContainer = createRoot(root)
 rootContainer.render(
   <Provider store={store}>
-    <ThemeProvider theme={theme}>
-  <CssBaseline />
-  <App />
-</ThemeProvider>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <App />
+  </ThemeProvider>
+    </StyledEngineProvider>
 </Provider>)

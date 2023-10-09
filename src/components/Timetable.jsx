@@ -1,73 +1,94 @@
-import React, { useState, useEffect } from 'react'
-import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, IconButton, makeStyles } from '@material-ui/core'
+import React from 'react'
+import { styled } from '@mui/material/styles'
+import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, IconButton } from '@mui/material'
 import html2pdf from 'html2pdf.js'
 import html2canvas from 'html2canvas'
-import { Refresh, PictureAsPdf, CropOriginal } from '@material-ui/icons' // Import the icons
-import { useSelector } from 'react-redux';
+import { PictureAsPdf, CropOriginal } from '@mui/icons-material' // Import the icons
+import { useSelector } from 'react-redux'
 
-const useStyles = makeStyles({
-  cell: {
-    padding: '2px', // Adjust the padding as needed
+const PREFIX = 'Timetable'
+
+const classes = {
+  timeTableTable: `${PREFIX}-timeTableTable`,
+  cell: `${PREFIX}-cell`,
+  headerDay: `${PREFIX}-headerDay`,
+  headerTime: `${PREFIX}-headerTime`,
+  oClockRow: `${PREFIX}-oClockRow`,
+  oClockCell: `${PREFIX}-oClockCell`,
+  cellOfClass: `${PREFIX}-cellOfClass`,
+  cellOfTime: `${PREFIX}-cellOfTime`,
+  timeLabel: `${PREFIX}-timeLabel`,
+  cellOfTimeOClock: `${PREFIX}-cellOfTimeOClock`,
+  classInfo: `${PREFIX}-classInfo`,
+  classInfoCourse: `${PREFIX}-classInfoCourse`
+}
+
+const StyledPaper = styled(Paper)({
+  [`& .${classes.timetableTable}`]: {
+    borderCollapse: 'collapse'
+  },
+  [`& .${classes.cell}`]: {
+    padding: '0px 3px', // Adjust the padding as needed
     fontSize: '10px', // Set the desired font size
-    position: 'relative' // Position relative for absolute positioning of class info
+    position: 'relative', // Position relative for absolute positioning of class info
+    border: 'none',
+    borderLeft: '1px solid #ccc',
+    verticalAlign: 'top',
+    height: '15px'
   },
-  headerDay: {
-    // textAlign: 'center',
-    width: 'calc(100% / 8)' // Equal width for each of the 7 days + time
+  [`& .${classes.headerDay}`]: {
+    padding: '10px 5px',
+    textAlign: 'center',
+    fontSize: '15px',
+    width: 'calc(100% / 8)', // Equal width for each of the 7 days + time
+    textTransform: 'uppercase'
   },
-  oClockRow: {
-    borderTop: '1px solid #000' // Add a solid border to the top of "o'clock" rows
+  [`& .${classes.headerTime}`]: {
+    padding: '10px 10px 5px 5px',
+    textAlign: 'right',
+    borderLeft: 'none'
   },
-  oClockCell: {
-    fontWeight: 'bold'
+  [`& .${classes.oClockRow}`]: {
+
   },
-  cellOfClass: {
-    borderRadius: '4px'
+  [`& .${classes.oClockCell}`]: {
+    fontWeight: 'bold',
+    borderTop: '1px solid #ccc'
   },
-  classInfo: {
-    position: 'absolute',
-    top: '50%', // Center vertically
-    left: '50%', // Center horizontally
-    transform: 'translate(-50%, -50%)', // Center the element
+  [`& .${classes.cellOfClass}`]: {
+    // borderRadius: '4px',
+    border: '2px solid #000',
+    overflow: 'hidden'
+  },
+  [`& .${classes.cellOfTime}`]: {
+    borderLeft: 'none',
+    textAlign: 'right',
+    paddingRight: '10px',
+    position: 'relative'
+  },
+  [`& .${classes.timeLabel}`]: {
+    marginTop: '-5px'
+  },
+  [`& .${classes.cellOfTimeOClock}`]: {
+    borderTop: 'none'
+  },
+  [`& .${classes.classInfo}`]: {
+    padding: '5px 2px',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
+    overflow: 'hidden',
     pointerEvents: 'none' // Prevent class info from blocking interactions with cells
+  },
+  [`& .${classes.classInfoCourse}`]: {
+    fontSize: '12px',
+    fontWeight: 'bold'
   }
 })
 
 const Timetable = () => {
-  const classes = useStyles()
-  const courses = useSelector((state) => state.courses);
-
-  //const [courses, setCourses] = useState(getCoursesFromStorage())
-
-  // useEffect(() => {
-  //   const updateFromStorage = (event) => {
-  //     if (event.key === 'courses') {
-  //       // Handle the change in storage and update the component state
-  //       const storedCourses = getCoursesFromStorage()
-  //       setCourses(storedCourses)
-  //     }
-  //   }
-
-  //   window.addEventListener('storage', updateFromStorage)
-
-  //   return () => {
-  //     // window.removeEventListener('storage', updateFromStorage)
-  //   }
-  // }, [])
-
-  // Function to get time slots from storage
-  function getCoursesFromStorage () {
-    const storedCourses = JSON.parse(localStorage.getItem('courses') || '[]')
-    return storedCourses
-  }
-
-  const refreshFromStorage = () => {
-    const storedCourses = getCoursesFromStorage()
-    setCourses(storedCourses)
-  }
+  const courses = useSelector((state) => state.courses)
 
   const generateTimeSlots = () => {
     const timeSlots = []
@@ -76,7 +97,8 @@ const Timetable = () => {
 
     for (let i = 0; i < 56; i++) {
       const time = new Date(startTime.getTime() + i * 15 * 60 * 1000)
-      const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      // const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      const formattedTime = time.toLocaleTimeString('it-ch', { hour: '2-digit', minute: '2-digit' })
       timeSlots.push({ time: formattedTime, isOClock: time.getMinutes() === 0, classInfo: [] })
     }
 
@@ -103,6 +125,8 @@ const Timetable = () => {
           course: course.name,
           dayOfWeek,
           label,
+          timeFrom,
+          timeTo,
           color: course.color,
           length: classLength,
           isStartOfClass
@@ -124,7 +148,7 @@ const Timetable = () => {
         margin: 10,
         filename: 'timetable.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
+        html2canvas: { scale: 1 },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
       }
 
@@ -141,7 +165,7 @@ const Timetable = () => {
       return
     }
 
-    const scale = 1 // Adjust the scale factor as needed
+    const scale = 4 // Adjust the scale factor as needed
 
     html2canvas(container, { scale }).then((canvas) => {
       const pngData = canvas.toDataURL('image/png')
@@ -155,26 +179,23 @@ const Timetable = () => {
   }
 
   return (
-    <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+    <StyledPaper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
       <Typography variant="h6" gutterBottom>
         Timetable
       </Typography>
       <Toolbar className={classes.toolbar}>
-        <IconButton onClick={refreshFromStorage} color="primary">
-          <Refresh />
-        </IconButton>
-        <IconButton onClick={exportAsPdf} color="primary">
+        <IconButton onClick={exportAsPdf} color="primary" size="large">
           <PictureAsPdf />
         </IconButton>
-        <IconButton onClick={exportTimetableAsPng} color="primary">
+        <IconButton onClick={exportTimetableAsPng} color="primary" size="large">
           <CropOriginal />
         </IconButton>
       </Toolbar>
       <TableContainer id="timetable-container">
-        <Table>
+        <Table className={classes.timeTableTable}>
           <TableHead>
             <TableRow>
-              <TableCell className={classes.cell}>Time</TableCell>
+              <TableCell className={`${classes.cell} ${classes.headerTime}`}>Time</TableCell>
               {daysOfWeek.map((day) => (
                 <TableCell key={day} className={`${classes.cell} ${classes.headerDay}`}>
                   {day}
@@ -186,13 +207,13 @@ const Timetable = () => {
             {timeSlots.map((row, rowIndex) => (
               <React.Fragment key={row.time}>
                 <TableRow className={row.isOClock ? classes.oClockRow : ''}>
-                  <TableCell className={`${classes.cell} ${row.isOClock ? classes.oClockCell : ''}`}>
-                    {row.isOClock ? row.time : ' - '}
+                  <TableCell className={`${classes.cell} ${classes.cellOfTime} ${row.isOClock ? classes.cellOfTimeOClock : ''}`}>
+                    <div className={classes.timeLabel}>{row.isOClock ? row.time : '\u00A0'}</div>
                   </TableCell>
                   {daysOfWeek.map((day, colIndex) => {
                     const classInfo = row.classInfo.find((info) => info.dayOfWeek === day)
 
-                    if (!classInfo) { return (<TableCell key={day} className={classes.cell}></TableCell>) }
+                    if (!classInfo) { return (<TableCell key={day} className={`${classes.cell} ${row.isOClock ? classes.oClockCell : ''}`}>&nbsp;</TableCell>) }
 
                     if (classInfo.isStartOfClass) {
                       return (<TableCell
@@ -200,12 +221,14 @@ const Timetable = () => {
                           rowSpan={classInfo.isStartOfClass ? classInfo.length : 1}
                           className={`${classes.cell} ${classes.cellOfClass}`}
                           style={{
-                            border: classInfo.isStartOfClass ? 'none' : null,
+                            // border: classInfo.isStartOfClass ? 'none' : null,
                             backgroundColor: classInfo.color || '#CCCCCC'
                           }}
                         >
                           <div className={classes.classInfo}>
-                            <span>{classInfo.course}</span>
+                              <div>{classInfo.timeFrom} - {classInfo.timeTo}</div>
+                              <div className={classes.classInfoCourse}>{classInfo.course}</div>
+                              <div><strong>{classInfo.label}</strong></div>
                           </div>
                         </TableCell>)
                     }
@@ -219,7 +242,7 @@ const Timetable = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </Paper>
+    </StyledPaper>
   )
 }
 

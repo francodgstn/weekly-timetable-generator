@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { SketchPicker } from 'react-color'
-import { Chip, Popover, TextField } from '@material-ui/core'
-import { FormControl, InputLabel } from '@mui/material'
+import { Chip, Popover, TextField, FormControl } from '@mui/material'
 
 // eslint-disable-next-line react/prop-types
 const ColorPicker = ({ color, onChange }) => {
@@ -24,6 +23,7 @@ const ColorPicker = ({ color, onChange }) => {
       <FormControl>
       {/* <InputLabel id={'color-label'}>Color</InputLabel> */}
       <TextField
+          size="small"
           id={'color'}
           label="Color"
           name="color"

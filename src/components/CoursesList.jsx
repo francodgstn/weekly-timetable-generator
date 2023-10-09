@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Chip } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Chip } from '@mui/material'
 
 const CoursesList = () => {
   const [courses, setCourses] = useState(getCoursesFromStorage())

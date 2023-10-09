@@ -4,18 +4,17 @@ const coursesSlice = createSlice({
   name: 'courses',
   initialState: [],
   reducers: {
-    courseAdded(state, action) {
+    coursesImported (state, action) {
+      return action.payload
+    },
+    courseAdded (state, action) {
       state.push(action.payload)
     },
-    courseDeletedAll(state, action) {
-      state = []
+    courseDeletedAll (state, action) {
+      return []
     }
-    // courseToggled(state, action) {
-    //   const course = state.find(course => course.id === action.payload)
-    //   course.completed = !course.completed
-    // }
   }
 })
 
-export const { courseAdded, courseDeletedAll } = coursesSlice.actions
+export const { coursesImported, courseAdded, courseDeletedAll } = coursesSlice.actions
 export default coursesSlice.reducer
