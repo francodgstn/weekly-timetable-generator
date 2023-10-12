@@ -59,7 +59,7 @@ const ImportCoursesButton = ({ onImport }) => {
         />
       </Button> */}
       <Button component="label" variant="contained" startIcon={<CloudUpload />}>
-        Upload file
+        Import JSON
         <VisuallyHiddenInput type="file" onChange={handleFileChange}/>
     </Button>
     </div>

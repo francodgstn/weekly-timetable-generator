@@ -9,7 +9,9 @@ import {
   FormControl,
   InputLabel,
   Grid,
-  Box
+  Divider,
+  Stack,
+  Chip
 } from '@mui/material'
 import dayjs from 'dayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
@@ -68,15 +70,6 @@ const EntryForm = () => {
     }
 
     dispatch(courseAdded(newCourse))
-
-    // Optionally, you can reset the form data
-    // setFormData({
-    //   name: '',
-    //   color: '#CCCCCC',
-    //   schedule: [{ dayOfWeek: '', timeFrom: defaultTime, timeTo: defaultTime, label: '' }]
-    // })
-
-    // Optionally, you can trigger a re-render or any other logic
   }
 
   const handleImport = (value) => {
@@ -101,110 +94,139 @@ const EntryForm = () => {
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
-      <Button variant="contained" color="primary" onClick={clearTimetable}>
-        Clear Timetable
-      </Button>
+      <Paper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Stack spacing={2}  direction={{ xs: 'column', sm: 'row' }}>
+              <ImportCoursesButton
+                onImport={handleImport} />
+              <Button  variant="contained" color="primary" onClick={clearTimetable}>
+                Clear Timetable
+              </Button>
+              
+            </Stack>
+          </Grid>
 
-      <ImportCoursesButton
-        onImport={handleImport} />
-      <Typography variant="h6" gutterBottom>
-        Add New Course
-      </Typography>
-      <Box
-          component="form"
-          sx={{
-            '& .MuiTextField-root': { m: 1, width: '25ch' }
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <TextField
-              size="small"
-              label="Name"
-              fullWidth
-              id={'name'}
-              name="name"
-              value={formData.name}
-              onChange={(e) => handleInputChange(-1, 'name', e.target.value)}
-            />
-          <ColorSelect
-              color={formData.color}
-              onChange={(e) => handleInputChange(-1, 'color', e)}
-            />
-
-{formData.schedule.map((courseClass, index) => (
-         <>
+          <Grid container item xs={12}>
+            <Grid item>
               <Typography variant="h6" gutterBottom>
-              {`Class ${index + 1}`}
+                Add New Course
               </Typography>
+            </Grid>
+            <Grid item container xs={12} direction={'row'}>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  size="small"
+                  label="Name"
+                  id={'name'}
+                  name="name"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange(-1, 'name', e.target.value)}
+                />
+              </Grid>
 
-              <TextField
-                label="Label"
-                fullWidth
-                size='small'
-                name={`label-${index}`}
-                value={courseClass.label}
-                onChange={(e) => handleInputChange(index, 'label', e.target.value)}
-              />
+              <Grid item xs={12} sm={4}>
+                <ColorSelect
+                  color={formData.color}
+                  onChange={(e) => handleInputChange(-1, 'color', e)}
+                />
 
-              <InputLabel id={`dayOfWeek-label-${index}`}>Day Of Week</InputLabel>
-              <Select
-                size="small"
-                fullWidth
-                labelId={`dayOfWeek-label-${index}`}
-                id={`dayOfWeek-${index}`}
-                name={`dayOfWeek-${index}`}
-                value={courseClass.dayOfWeek}
-                onChange={(e) => handleInputChange(index, 'dayOfWeek', e.target.value)}
-              >
-                <MenuItem value="Monday">Monday</MenuItem>
-                <MenuItem value="Tuesday">Tuesday</MenuItem>
-                <MenuItem value="Wednesday">Wednesday</MenuItem>
-                <MenuItem value="Thursday">Thursday</MenuItem>
-                <MenuItem value="Friday">Friday</MenuItem>
-                <MenuItem value="Saturday">Saturday</MenuItem>
-                <MenuItem value="Sunday">Sunday</MenuItem>
-              </Select>
+              </Grid>
+            </Grid>
 
-              <InputLabel id={`timeFrom-${index}`} >From</InputLabel>
-              <MultiSectionDigitalClock
-                style={{ height: '150px' }}
-                skipDisabled
-                shouldDisableTime={shouldDisableTime}
-                timeSteps={{ hours: 1, minutes: 15 }}
-                ampm={false}
-                value={courseClass.timeFrom}
-                onChange={(newValue) => handleInputChange(index, 'timeFrom', newValue)}
-              />
+            {formData.schedule.map((courseClass, index) => (
+              <Grid item container direction={'row'}>
+                
+                <Grid item xs={12}>
+                  <Divider textAlign="left" sx={{mb:2,mt:2}}> <Chip size="small" label={`Class ${index+1}`} /></Divider>
+                </Grid>
 
-              <InputLabel id={`timeTo-${index}`} >To</InputLabel>
-              <MultiSectionDigitalClock
-                style={{ height: '150px' }}
-                skipDisabled
-                shouldDisableTime={shouldDisableTime}
-                timeSteps={{ hours: 1, minutes: 15 }}
-                ampm={false}
-                value={courseClass.timeTo}
-                onChange={(newValue) => handleInputChange(index, 'timeTo', newValue)}
-              />
-        </>))
-        }
+                <Grid item xs={12} sm={4}>
+                  <TextField
+                    size="small"
+                    label="Label"
+                    name={`label-${index}`}
+                    value={courseClass.label}
+                    onChange={(e) => handleInputChange(index, 'label', e.target.value)}
+                  />
+                </Grid>
 
-    </Box>
-      <form onSubmit={handleSubmit}>
+                <Grid item xs={12} sm={4}>
+                  <FormControl sx={{ minWidth: 210 }}>
+                    <InputLabel size="small" id={`dayOfWeek-label-${index}`}>Day Of Week</InputLabel>
+                    <Select
+                      size="small"
+                      labelId={`dayOfWeek-label-${index}`}
+                      id={`dayOfWeek-${index}`}
+                      name={`dayOfWeek-${index}`}
+                      value={courseClass.dayOfWeek}
+                      label="Day Of Week"
+                      autoWidth
+                      onChange={(e) => handleInputChange(index, 'dayOfWeek', e.target.value)}
+                    >
+                     
+                      <MenuItem value="Monday">Monday</MenuItem>
+                      <MenuItem value="Tuesday">Tuesday</MenuItem>
+                      <MenuItem value="Wednesday">Wednesday</MenuItem>
+                      <MenuItem value="Thursday">Thursday</MenuItem>
+                      <MenuItem value="Friday">Friday</MenuItem>
+                      <MenuItem value="Saturday">Saturday</MenuItem>
+                      <MenuItem value="Sunday">Sunday</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
 
-        <Button type="button" variant="contained" color="secondary" onClick={handleAddClass}>
-          Add Another Class
-        </Button>
+                <Grid item xs={6} sm={2}>
+                
+                  <InputLabel shrink={true} id={`timeFrom-${index}`} >From</InputLabel>
+                  <MultiSectionDigitalClock
+                    labelId={`timeFrom-${index}`}
+                    style={{ height: '105px' }}
+                    skipDisabled
+                    shouldDisableTime={shouldDisableTime}
+                    timeSteps={{ hours: 1, minutes: 15 }}
+                    ampm={false}
+                    value={courseClass.timeFrom}
+                    onChange={(newValue) => handleInputChange(index, 'timeFrom', newValue)}
+                  />
+                
+                </Grid>
 
-        {/* Add more form fields as needed */}
-        <Button type="submit" variant="contained" color="primary">
-          Add Course
-        </Button>
+                <Grid item xs={6} sm={2}>
+                  <InputLabel shrink={true} id={`timeTo-${index}`} >To</InputLabel>
+                  <MultiSectionDigitalClock
+                    style={{ height: '105px' }}
+                    skipDisabled
+                    shouldDisableTime={shouldDisableTime}
+                    timeSteps={{ hours: 1, minutes: 15 }}
+                    ampm={false}
+                    value={courseClass.timeTo}
+                    onChange={(newValue) => handleInputChange(index, 'timeTo', newValue)}
+                  />
+                </Grid>
+                
+                
+                  
+              </Grid>))
+            }
 
-      </form>
-    </Paper>
+          </Grid>
+
+        </Grid>
+
+        <Stack spacing={2}  direction={{ xs: 'column', sm: 'row' }}>
+            
+          <Button type="button" variant="contained" color="secondary" onClick={handleAddClass}>
+            Add Another Class
+          </Button>
+
+          {/* Add more form fields as needed */}
+          <Button type="submit" variant="contained" color="primary" onClick={handleSubmit}>
+            Add Course
+          </Button>
+
+        </Stack>
+      </Paper>
     </LocalizationProvider>
   )
 }

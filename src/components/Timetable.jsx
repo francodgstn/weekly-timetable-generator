@@ -1,9 +1,9 @@
 import React from 'react'
 import { styled } from '@mui/material/styles'
-import { Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, IconButton } from '@mui/material'
+import { Paper, Typography, Tooltip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, IconButton } from '@mui/material'
 import html2pdf from 'html2pdf.js'
 import html2canvas from 'html2canvas'
-import { PictureAsPdf, CropOriginal } from '@mui/icons-material' // Import the icons
+import { PictureAsPdf, CropOriginal, FileDownload } from '@mui/icons-material' // Import the icons
 import { useSelector } from 'react-redux'
 
 const PREFIX = 'Timetable'
@@ -40,11 +40,12 @@ const StyledPaper = styled(Paper)({
     padding: '10px 5px',
     textAlign: 'center',
     fontSize: '15px',
-    width: 'calc(100% / 8)', // Equal width for each of the 7 days + time
+    width: 'calc(95% / 7)', // Equal width for each of the 7 days + time
     textTransform: 'uppercase'
   },
   [`& .${classes.headerTime}`]: {
     padding: '10px 10px 5px 5px',
+    width: '5%',
     textAlign: 'right',
     borderLeft: 'none'
   },
@@ -149,7 +150,7 @@ const Timetable = () => {
         filename: 'timetable.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 1 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF: { format: 'a4', orientation: 'portrait' }
       }
 
       // Use html2pdf to generate the PDF
@@ -167,7 +168,7 @@ const Timetable = () => {
 
     const scale = 4 // Adjust the scale factor as needed
 
-    html2canvas(container, { scale }).then((canvas) => {
+    html2canvas(container, { scale, quality: 0.98 }).then((canvas) => {
       const pngData = canvas.toDataURL('image/png')
       const link = document.createElement('a')
       link.href = pngData
@@ -178,19 +179,49 @@ const Timetable = () => {
     })
   }
 
+  const exportTimetableAsJson = () => {
+    const container = document.getElementById('timetable-container')
+
+    if (!container) {
+      console.error('Container not found')
+      return
+    }
+
+    const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
+      JSON.stringify(courses)
+    )}`;
+    const link = document.createElement("a");
+    link.href = jsonString;
+    link.download = "data.json";
+
+    link.click();
+  }
+
   return (
     <StyledPaper elevation={3} style={{ padding: '20px', marginTop: '20px' }}>
       <Typography variant="h6" gutterBottom>
         Timetable
       </Typography>
       <Toolbar className={classes.toolbar}>
-        <IconButton onClick={exportAsPdf} color="primary" size="large">
-          <PictureAsPdf />
-        </IconButton>
-        <IconButton onClick={exportTimetableAsPng} color="primary" size="large">
-          <CropOriginal />
-        </IconButton>
+        <Tooltip title="Export as JSON">
+          <IconButton onClick={exportTimetableAsJson} color="primary" size="large">
+            <FileDownload />
+          </IconButton>
+        </Tooltip>
+        
+        <Tooltip title="Export as PNG">
+          <IconButton onClick={exportTimetableAsPng} color="primary" size="large">
+            <CropOriginal />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Export as PDF">
+          <IconButton onClick={exportAsPdf} color="primary" size="large">
+            <PictureAsPdf />
+          </IconButton>
+        </Tooltip>
       </Toolbar>
+
       <TableContainer id="timetable-container">
         <Table className={classes.timeTableTable}>
           <TableHead>
@@ -217,20 +248,20 @@ const Timetable = () => {
 
                     if (classInfo.isStartOfClass) {
                       return (<TableCell
-                          key={day}
-                          rowSpan={classInfo.isStartOfClass ? classInfo.length : 1}
-                          className={`${classes.cell} ${classes.cellOfClass}`}
-                          style={{
-                            // border: classInfo.isStartOfClass ? 'none' : null,
-                            backgroundColor: classInfo.color || '#CCCCCC'
-                          }}
-                        >
-                          <div className={classes.classInfo}>
-                              <div>{classInfo.timeFrom} - {classInfo.timeTo}</div>
-                              <div className={classes.classInfoCourse}>{classInfo.course}</div>
-                              <div><strong>{classInfo.label}</strong></div>
-                          </div>
-                        </TableCell>)
+                        key={day}
+                        rowSpan={classInfo.isStartOfClass ? classInfo.length : 1}
+                        className={`${classes.cell} ${classes.cellOfClass}`}
+                        style={{
+                          // border: classInfo.isStartOfClass ? 'none' : null,
+                          backgroundColor: classInfo.color || '#CCCCCC'
+                        }}
+                      >
+                        <div className={classes.classInfo}>
+                          <div>{classInfo.timeFrom} - {classInfo.timeTo}</div>
+                          <div className={classes.classInfoCourse}>{classInfo.course}</div>
+                          <div><strong>{classInfo.label}</strong></div>
+                        </div>
+                      </TableCell>)
                     }
 
                     return ''

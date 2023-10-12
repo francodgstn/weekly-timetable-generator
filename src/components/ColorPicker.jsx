@@ -24,7 +24,7 @@ const ColorPicker = ({ color, onChange }) => {
       {/* <InputLabel id={'color-label'}>Color</InputLabel> */}
       <TextField
           size="small"
-          id={'color'}
+          id='color'
           label="Color"
           name="color"
           value={color}
@@ -32,7 +32,7 @@ const ColorPicker = ({ color, onChange }) => {
           />
       </FormControl>
       <Chip onClick={handleClick}
-            style={{ backgroundColor: color, width: '30px', height: '30px', marginTop: '15px' }}
+            sx={{backgroundColor: color, width:'30px', height:'30px', mt: '5px', ml:-5 }}
             label=""
             />
       <Popover

@@ -18,12 +18,12 @@ const Content = () => {
     <Container>
       <Grid container spacing={3}>
         {/* Left Column - Form */}
-        <Grid item xs={12} sm={3}>
+        <Grid item xs={12} sm={12}>
           <EntryForm />
         </Grid>
 
         {/* Right Column - Timetable */}
-        <Grid xs={12} sm={9} item container >
+        <Grid xs={12} sm={12} item container >
           <Grid item xs={12} sm={12}>
             <Tabs value={tabValue} onChange={handleChangeTab}>
               <Tab label="Timetable" />
