@@ -8,7 +8,7 @@ Demo [here](https://simple-timetable-generator.web.app/)
 
 ![Sample Timetable](./sample-timetable.png)
 
-Initial skeleten created by ChatGPT. Unfortunately it doesn't really know latest varsions of MUI, so it needed some manual refinment.
+The initial skeleton was created by ChatGPT. Unfortunately, it doesn't really know the latest versions of MUI, so it needed some manual refinement.
 
 ## Get started
 
@@ -18,7 +18,7 @@ Dev
 npm rur dev
 `
 
-Build (output to public folder)
+Build (output to `public` folder)
 
 `
 npm run build
@@ -29,11 +29,10 @@ npm run build
 > [!WARNING]
 >  
 > - **Overlapping** classes are not hadled yet.
-> - Currently there is no validation on the input (e.g. end time beroe start time)
-> - Currently the timetable is build with basic HTML `<table>`.
+> - Currently there is no validation on the input (e.g., endTime after startTime)
+> - Currently, the timetable is built with basic HTML  `<table>`.
 
-Timetable can be created manually or by importing a JSON file representing the courese like the example below.
-The idea is that courses can have multiple classes, each class can have an additional (optional) label, e.g.:
+The timetable can be created manually or by importing a JSON file representing the courses like the example below. The idea is that courses can have multiple classes, and each class can have an additional (optional) label, e.g.:
 
 - Course name: Piano
   - Class label: Classical
@@ -86,7 +85,7 @@ The JSON version would be:
 
 ## Github/Firebase CICD
 
-The project is linked to firbase. The CD has been setup with the firebase cli. You might want to adjust the project name in `.firebaserc` file. Automatic deployment is handled via two Github actions, one for normal merge and one for PR. The following variables are needed:
+The project is linked to Firebase. The CD has been set up with the Firebase CLI. You might want to adjust the project name in the .firebaserc file. Automatic deployment is handled via two GitHub actions, one for a normal merge and one for a PR. The following variables are needed:
 
 - `secrets.GITHUB_TOKEN`
 - `secrets.FIREBASE_SERVICE_ACCOUNT_SIMPLE_TIMETABLE_GENERATOR`
