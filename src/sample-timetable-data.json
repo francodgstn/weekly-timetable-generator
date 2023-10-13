@@ -1,0 +1,86 @@
+[
+    {
+        "name": "Piano",
+        "color": "#EBB1FF",
+        "schedule": [
+            {
+                "dayOfWeek": "Tuesday",
+                "timeFrom": "10:00",
+                "timeTo": "11:45",
+                "label": "Kids"
+            },
+            {
+                "dayOfWeek": "Thursday",
+                "timeFrom": "10:00",
+                "timeTo": "11:45",
+                "label": "Adults Jazz"
+            },
+            {
+                "dayOfWeek": "Saturday",
+                "timeFrom": "10:00",
+                "timeTo": "11:45",
+                "label": "Adults Classical"
+            }
+        ]
+    },
+    {
+        "name": "Guitar",
+        "color": "#91F1A5",
+        "schedule": [
+            {
+                "dayOfWeek": "Monday",
+                "timeFrom": "11:00",
+                "timeTo": "12:45",
+                "label": "Kids"
+            },
+            {
+                "dayOfWeek": "Wednesday",
+                "timeFrom": "11:00",
+                "timeTo": "12:45",
+                "label": "Adults Classical"
+            },
+            {
+                "dayOfWeek": "Friday",
+                "timeFrom": "11:00",
+                "timeTo": "12:45",
+                "label": "Adults Jazz"
+            }
+        ]
+    },
+    {
+        "name": "Drums",
+        "color": "#9DEAFF",
+        "schedule": [
+            {
+                "dayOfWeek": "Monday",
+                "timeFrom": "14:00",
+                "timeTo": "15:45",
+                "label": "Kids"
+            },
+            {
+                "dayOfWeek": "Wednesday",
+                "timeFrom": "14:00",
+                "timeTo": "15:45",
+                "label": "Adults"
+            },
+            {
+                "dayOfWeek": "Friday",
+                "timeFrom": "14:00",
+                "timeTo": "15:45",
+                "label": "Adults Jazz"
+            }
+        ]
+    },
+    { 
+        "name": "Jam Session",
+        "color": "#FA6868",
+        "schedule": [
+            {
+                "dayOfWeek": "Saturday",
+                "timeFrom": "13:00",
+                "timeTo": "20:00",
+                "label": ""
+            }
+        ]
+    }
+]

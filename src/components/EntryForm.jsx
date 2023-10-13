@@ -19,7 +19,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { MultiSectionDigitalClock } from '@mui/x-date-pickers/MultiSectionDigitalClock'
 import { useDispatch } from 'react-redux'
 import ColorSelect from './ColorPicker'
-import { coursesImported, courseAdded, courseDeletedAll } from './coursesSlice'
+import { importCourses, addCourse, deletedAllCourses, loadSampleData } from './coursesSlice'
 import ImportCoursesButton from './ImportCoursesButton'
 
 const EntryForm = () => {
@@ -73,7 +73,7 @@ const EntryForm = () => {
   }
 
   const handleImport = (value) => {
-    dispatch(coursesImported(value))
+    dispatch(importCourses(value))
   }
 
   const shouldDisableTime = (value, view) => {
@@ -89,7 +89,11 @@ const EntryForm = () => {
   }
 
   const clearTimetable = () => {
-    dispatch(courseDeletedAll())
+    dispatch(deletedAllCourses())
+  }
+
+  const loadSampleTimetable = () => {
+    dispatch(loadSampleData())
   }
 
   return (
@@ -102,6 +106,10 @@ const EntryForm = () => {
                 onImport={handleImport} />
               <Button  variant="contained" color="primary" onClick={clearTimetable}>
                 Clear Timetable
+              </Button>
+
+              <Button  variant="contained" color="primary" onClick={loadSampleTimetable}>
+                Load Sample Data
               </Button>
               
             </Stack>
